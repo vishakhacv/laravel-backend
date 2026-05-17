@@ -18,6 +18,5 @@ RUN composer install
 RUN php artisan config:clear
 
 EXPOSE 10000
-RUN php artisan optimize:clear
-CMD php artisan optimize:clear && php artisan config:clear && php artisan cache:clear && php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000
-# CMD php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000
+
+CMD php artisan config:clear && php artisan cache:clear && php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000# CMD php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000
