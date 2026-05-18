@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(AdminUserSeeder::class);
         User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -17,4 +18,3 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
-$this->call(AdminUserSeeder::class);
