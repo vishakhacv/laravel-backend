@@ -5,7 +5,27 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
+Route::get('/reset-admin', function () {
+
+    $user = User::where('email', 'admin@example.com')->first();
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'Admin not found'
+        ]);
+    }
+
+    $user->password = Hash::make('Admin123');
+    $user->role = 'admin';
+    $user->save();
+
+    return response()->json([
+        'message' => 'Admin reset successful'
+    ]);
+});
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
