@@ -8,22 +8,28 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-Route::get('/reset-admin', function () {
+Route::get('/ensure-defaults', function () {
+    // Re-run the default user seeder to guarantee accounts exist
+    User::updateOrCreate(
+        ['email' => 'admin@example.com'],
+        [
+            'name' => 'Admin',
+            'password' => Hash::make('Admin123'),
+            'role' => 'admin',
+        ]
+    );
 
-    $user = User::where('email', 'admin@example.com')->first();
-
-    if (!$user) {
-        return response()->json([
-            'message' => 'Admin not found'
-        ]);
-    }
-
-    $user->password = Hash::make('Admin123');
-    $user->role = 'admin';
-    $user->save();
+    User::updateOrCreate(
+        ['email' => 'memberv@example.com'],
+        [
+            'name' => 'Member-V',
+            'password' => Hash::make('member123'),
+            'role' => 'member',
+        ]
+    );
 
     return response()->json([
-        'message' => 'Admin reset successful'
+        'message' => 'Default accounts ensured successfully.',
     ]);
 });
 // Public routes

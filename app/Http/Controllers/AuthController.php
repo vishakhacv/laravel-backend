@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Database\Seeders\AdminUserSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,11 +19,19 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // Block registration with protected default emails
+        if (in_array(strtolower($validated['email']), array_map('strtolower', AdminUserSeeder::PROTECTED_EMAILS))) {
+            throw ValidationException::withMessages([
+                'email' => ['This email address is reserved and cannot be used for registration.'],
+            ]);
+        }
+
+        // New registrations are always 'member'
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => User::count() === 0 ? 'admin' : 'member',
+            'role' => 'member',
         ]);
 
         $token = $user->createToken('auth-token')->plainTextToken;

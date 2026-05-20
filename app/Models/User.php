@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\AdminUserSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +28,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Check if this user is a protected default account.
+     */
+    public function isProtected(): bool
+    {
+        return in_array(
+            strtolower($this->email),
+            array_map('strtolower', AdminUserSeeder::PROTECTED_EMAILS)
+        );
+    }
 
     public function isAdmin(): bool
     {

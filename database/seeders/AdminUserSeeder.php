@@ -8,19 +8,27 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
+    /**
+     * Protected default accounts — always recreated with these exact credentials.
+     */
+    public const PROTECTED_EMAILS = [
+        'admin@example.com',
+        'memberv@example.com',
+    ];
+
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin@cmp.com'],
+            ['email' => 'admin@example.com'],
             [
-                'name' => 'Admin-Leo',
-                'password' => Hash::make('admin123'),
+                'name' => 'Admin',
+                'password' => Hash::make('Admin123'),
                 'role' => 'admin',
             ]
         );
 
         User::updateOrCreate(
-            ['email' => 'member@example.com'],
+            ['email' => 'memberv@example.com'],
             [
                 'name' => 'Member-V',
                 'password' => Hash::make('member123'),
